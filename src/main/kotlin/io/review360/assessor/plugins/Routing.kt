@@ -8,14 +8,15 @@ import io.ktor.server.routing.*
 import io.review360.assessor.model.*
 
 import io.review360.assessor.model.SkillCode
-import io.review360.assessor.storage.Answer
-import io.review360.assessor.storage.FormsRepository
-import io.review360.assessor.storage.ReviewForm
-import io.review360.assessor.storage.SubmissionResult
+import io.review360.assessor.storage.*
+
+const val URL_VERSION = "/v1"
+const val URL_NAME = "/api"
+const val URL_PREFIX = "$URL_NAME$URL_VERSION"
 
 fun Application.configureRouting() {
     routing {
-        route("/api/v1/forms") {
+        route("$URL_PREFIX/forms") {
             post {
                 val form = call.receive<ReviewForm>()
                 when (FormsRepository.submitForm(form)) {
@@ -23,25 +24,20 @@ fun Application.configureRouting() {
                     SubmissionResult.Duplicate -> call.respond(SubmissionResult.Duplicate.statusCode, SubmissionResult.Duplicate.result)
                 }
             }
-            get {
-                call.respond(
-                    FormsRepository.allForms()
-                )
-            }
             get("employees") {
                 call.respond(
                     listOf(
                         Employee(
                             email = "ivan@mail.ru",
-                            name = "Ivan",
+                            name = "John Smith",
                         ),
                         Employee(
                             email = "mark@mail.ru",
-                            name = "Mark",
+                            name = "Mark Axe",
                         ),
                         Employee(
                             email = "fedor@ya.ru",
-                            name = "Fedor",
+                            name = "Mike Ox",
                         ),
                     )
                 )
@@ -68,12 +64,22 @@ fun Application.configureRouting() {
                 call.respond(marks)
             }
         }
-        route("/api/v1/admin") {
-            post("download") {
-                createExcel(
+        route("$URL_PREFIX/admin") {
+            post("report/download") {
+                AssessedEmployeeRepository.performAssessment(FormsRepository.allForms())
+                createExcel(AssessedEmployeeRepository.allAssessedEmployees())
+                call.respond(HttpStatusCode.OK)
+            }
+            get("report") {
+                AssessedEmployeeRepository.performAssessment(FormsRepository.allForms())
+                call.respond(
+                    AssessedEmployeeRepository.allAssessedEmployees()
+                )
+            }
+            get("forms") {
+                call.respond(
                     FormsRepository.allForms()
                 )
-                call.respond(HttpStatusCode.OK)
             }
         }
     }

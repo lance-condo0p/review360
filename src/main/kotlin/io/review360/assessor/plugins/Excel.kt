@@ -1,17 +1,12 @@
 package io.review360.assessor.plugins
 
-import io.review360.assessor.storage.AssessedEmployeeRepository
-import io.review360.assessor.storage.FormsRepository
-import io.review360.assessor.storage.ReviewForm
+import io.review360.assessor.storage.ReviewResults
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.File
 
-fun createExcel(forms: List<ReviewForm>) {
-    AssessedEmployeeRepository.performAssessment(FormsRepository.allForms())
-    val assessedEmployees = AssessedEmployeeRepository.allAssessedEmployees()
-
+fun createExcel(assessedEmployees: Map<String, ReviewResults>) {
     val workbook = XSSFWorkbook()
     for(employee in assessedEmployees) {
         val workSheet = workbook.createSheet(employee.key)

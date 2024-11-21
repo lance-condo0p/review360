@@ -10,5 +10,5 @@ enum class SkillCode(
     HardType1("Employee knows Java programming", SkillType.ProgrammingHard),
     HardType2("Employee knows Git", SkillType.ProgrammingHard),
     HardType3("Employee has Ansible knowledge", SkillType.ProgrammingHard),
-    HardType5("Employee has SQL knowledge", SkillType.ProgrammingHard),
+    HardType4("Employee has SQL knowledge", SkillType.ProgrammingHard),
 }

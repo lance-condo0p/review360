@@ -58,20 +58,6 @@ function td(children) {
     return node;
 }
 
-function displayQuestions() {
-    fetchQuestions()
-        .then(questions => displayQuestions(questions))
-}
-
-function fetchQuestions() {
-    return fetch(
-        "/api/v1/forms/questions",
-        {
-            headers: { 'Accept': 'application/json' }
-        }
-    ).then(resp => resp.json());
-}
-
 function addEmptyOption(selectId) {
     const opt = document.createElement("option");
     const att = document.createAttribute("value");

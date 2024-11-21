@@ -1,6 +1,6 @@
 package io.review360.assessor.model
 
-enum class Skills(
+enum class SkillCode(
     val description: String,
     val type: SkillType,
 ) {

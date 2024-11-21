@@ -22,11 +22,16 @@ function select(questionCode, marks) {
 
     const attId = document.createAttribute("id");
     const attName = document.createAttribute("name");
+    const attRequired = document.createAttribute("required");
+    const attClass = document.createAttribute("class");
     attId.value = questionCode;
     attName.value = questionCode;
+    attClass.value = "minimal";
 
     node.setAttributeNode(attId);
     node.setAttributeNode(attName);
+    node.setAttributeNode(attRequired);
+    node.setAttributeNode(attClass);
 
     addEmptyOption(node);
     marks.forEach(mark => addOption(node, mark));
@@ -64,7 +69,7 @@ function addEmptyOption(selectId) {
     const att2 = document.createAttribute("selected");
 
     const textAttr = document.createTextNode("Please make your choice...");
-    att.value = "-";
+    att.value = "";
     att2.value = "selected";
     opt.setAttributeNode(att);
     opt.setAttributeNode(att2);
@@ -130,9 +135,9 @@ async function loadMarks() {
 }
 
 function buildJsonFormData(form) {
+//    console.log(form);
     const jsonFormData = { };
     let jsonRowData = { };
-//    console.log(form);
     let filledForm = new FormData(form);
     jsonFormData["reviewer_email"] = filledForm.get("reviewerEmail");
     filledForm.delete("reviewerEmail");
@@ -153,22 +158,21 @@ function buildJsonFormData(form) {
 function isValidForm() {
     const answers = document.getElementsByTagName("select");
     for (let i = 0; i < answers.length; i++) {
-//      console.log(answers[i].options[answers[i].selectedIndex].value);
-      if(answers[i].options[answers[i].selectedIndex].value == "-") {
+      if(answers[i].options[answers[i].selectedIndex].value == "") {
         return false;
       };
     }
     return true;
 }
 
-function anotherReview() {
+function resetForm() {
     const optionsToReset = document.querySelectorAll("option");
     for (let i = 0; i < optionsToReset.length; i++) {
         optionsToReset[i].selected = optionsToReset[i].defaultSelected;
     }
 }
 
-function exitReview() {
+function logout() {
     window.location.href = "/";
 }
 
@@ -189,8 +193,6 @@ window.onload = function() {
 
         const jsonFormData = buildJsonFormData(e.target);
 
-        console.log(jsonFormData);
-
         fetch("/api/v1/forms", {
           method: "POST",
           body: JSON.stringify(jsonFormData),
@@ -198,11 +200,12 @@ window.onload = function() {
             "Content-type": "application/json; charset=UTF-8"
           }
         }).then(response => {
-            console.log(response.status);
-            if(response.status == 201)
+            if(response.status == 201) {
                 alert("All good");
-            else
+                resetForm();
+            } else {
                 alert("Error!");
+            }
         });
      });
 };

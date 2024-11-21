@@ -1,22 +1,22 @@
 [
   {
     "code": "SoftType1",
-    "description": "Employee has the ability to talk",
+    "description": "Employee has the ability to communicate in clear way",
     "type": "SoftGeneral"
   },
   {
     "code": "SoftType2",
-    "description": "Employee has the ability to walk",
+    "description": "Employee has the ability to consult colleagues",
     "type": "SoftGeneral"
   },
   {
     "code": "SoftType3",
-    "description": "Employee has the ability to get",
+    "description": "Employee has the ability to get knowledge",
     "type": "SoftGeneral"
   },
   {
     "code": "HardType1",
-    "description": "Employee knows Java programming",
+    "description": "Employee knows Java language",
     "type": "HardProgramming"
   },
   {

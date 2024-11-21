@@ -74,5 +74,14 @@ fun Application.configureRouting() {
                 }
             }
         }
+        route("$URL_PREFIX/init") {
+            post {
+                val credentials = call.receive<Credentials>()
+                if (SecretsVault.init(credentials.login, credentials.password))
+                    call.respond(HttpStatusCode.OK)
+                else
+                    call.respond(HttpStatusCode.MethodNotAllowed)
+            }
+        }
     }
 }

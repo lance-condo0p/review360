@@ -2,17 +2,14 @@ package io.review360.assessor.plugins
 
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.review360.assessor.storage.SecretsVault
 
 fun Application.configureSecurity() {
     install(Authentication) {
         basic("auth-basic") {
             realm = "Access to the '/' path"
             validate { credentials ->
-                // TODO: implement even more secure algorithm
-                // Default values for local testing in IDE
-                if (credentials.name == System.getenv().getOrDefault("CREDENTIALS_DB_NAME", "foo") &&
-                    credentials.password == System.getenv().getOrDefault("CREDENTIALS_DB_PASSWORD", "bar")
-                ) {
+                if (SecretsVault.validate(credentials.name, credentials.password)) {
                     UserIdPrincipal(credentials.name)
                 } else {
                     null

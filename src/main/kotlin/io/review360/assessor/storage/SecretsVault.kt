@@ -1,27 +1,20 @@
 package io.review360.assessor.storage
 
-data class Credentials(
-    val login: String,
-    val password: String,
-)
+import io.ktor.server.auth.UserPasswordCredential
 
 /*
  * In-memory container for Basic Auth secrets
  */
-object SecretsVault {
-    private lateinit var login: String
-    private lateinit var password: String
+data object SecretsVault {
+    private lateinit var credentials: UserPasswordCredential
 
-    fun init(login: String, password: String): Boolean =
-        if ((!this::login.isInitialized) && (!this::password.isInitialized)) {
-            this.login = login
-            this.password = password
+    fun init(credentials: UserPasswordCredential): Boolean =
+        if (!this::credentials.isInitialized) {
+            this.credentials = credentials
             true
         } else false
 
-    fun validate(login: String, password: String): Boolean =
-        (this::login.isInitialized)
-                && (this::password.isInitialized)
-                && (this.login == login)
-                && (this.password == password)
+    fun validate(credentials: UserPasswordCredential): Boolean =
+        (this::credentials.isInitialized)
+                && (this.credentials == credentials)
 }

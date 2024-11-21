@@ -1,0 +1,37 @@
+[
+  {
+    "code": "SoftType1",
+    "description": "Employee has the ability to talk",
+    "type": "GeneralSoft"
+  },
+  {
+    "code": "SoftType2",
+    "description": "Employee has the ability to walk",
+    "type": "GeneralSoft"
+  },
+  {
+    "code": "SoftType3",
+    "description": "Employee has the ability to get",
+    "type": "GeneralSoft"
+  },
+  {
+    "code": "HardType1",
+    "description": "Employee knows Java programming",
+    "type": "ProgrammingHard"
+  },
+  {
+    "code": "HardType2",
+    "description": "Employee knows Git",
+    "type": "ProgrammingHard"
+  },
+  {
+    "code": "HardType3",
+    "description": "Employee has Ansible knowledge",
+    "type": "ProgrammingHard"
+  },
+  {
+    "code": "HardType4",
+    "description": "Employee has SQL knowledge",
+    "type": "ProgrammingHard"
+  }
+]

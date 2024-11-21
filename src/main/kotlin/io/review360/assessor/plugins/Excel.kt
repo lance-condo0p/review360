@@ -1,7 +1,6 @@
 package io.review360.assessor.plugins
 
 import io.review360.assessor.model.Employee
-import io.review360.assessor.storage.ReviewResults
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
@@ -35,7 +34,7 @@ fun createExcel(assessedEmployees: Map<Employee, ReviewResults>) {
 
             val row = workSheet.createRow(rowPointer++)
 
-            row.createCell(columnPointer++).setCellValue(skill.key.name)
+            row.createCell(columnPointer++).setCellValue(skill.key.code)
             row.createCell(columnPointer++).setCellValue(skill.key.description)
             row.createCell(columnPointer++).setCellValue(skill.value.getAverage())
 
@@ -46,11 +45,6 @@ fun createExcel(assessedEmployees: Map<Employee, ReviewResults>) {
         }
     }
 
-//    val tempFile = createTempFile("test_output_", ".xlsx")
-    val tempFile = kotlin.io.path.createTempFile("test_output_", ".xlsx")
-//    workbook.write(tempFile.outputStream())
-//    workbook.close()
-
     try {
         val file = File("db/test.xlsx")
         val stream = file.outputStream()
@@ -60,6 +54,4 @@ fun createExcel(assessedEmployees: Map<Employee, ReviewResults>) {
     } catch (e: Exception) {
         println(e.message)
     }
-//    val inputWorkbook = WorkbookFactory.create(tempFile.toFile().inputStream())
-//    val firstSheet = inputWorkbook.getSheetAt(0)
 }

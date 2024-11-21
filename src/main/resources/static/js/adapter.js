@@ -145,7 +145,7 @@ function buildJsonFormData(form) {
     filledForm.delete("employeeEmail");
     let jsonArray = [];
     for(const pair of filledForm) {
-        jsonRowData["code"] = pair[0];
+        jsonRowData["skill"] = pair[0];
         jsonRowData["points"] = pair[1];
         jsonArray.push(jsonRowData);
         jsonRowData = { };

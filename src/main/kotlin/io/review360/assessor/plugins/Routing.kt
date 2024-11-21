@@ -7,8 +7,6 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.review360.assessor.model.*
-
-import io.review360.assessor.model.SkillCode
 import io.review360.assessor.storage.*
 
 const val URL_VERSION = "/v1"
@@ -29,15 +27,15 @@ fun Application.configureRouting() {
             }
             get("employees") {
                 call.respond(
-                    EmployeesRepository.allEmployees()
+                    EmployeesRepository.getAll()
                 )
             }
             get("questions") {
-                val questions = ArrayList<Answer>()
-                SkillCode.entries.toTypedArray().forEach {
+                val questions = ArrayList<Question>()
+                SkillsRepository.getAll().forEach {
                     questions.add(
-                        Answer(
-                            code = it,
+                        Question(
+                            code = it.code,
                             description = it.description,
                         )
                     )
@@ -57,29 +55,33 @@ fun Application.configureRouting() {
         authenticate("auth-basic") {
             route("$URL_PREFIX/admin") {
                 post("report/download") {
-                    AssessedEmployeeRepository.performAssessment(FormsRepository.allForms())
-                    createExcel(AssessedEmployeeRepository.allAssessedEmployees())
+                    AssessedEmployeeRepository.performAssessment(FormsRepository.getAll())
+                    createExcel(AssessedEmployeeRepository.getAll())
                     call.respond(HttpStatusCode.OK)
                 }
                 get("report") {
-                    AssessedEmployeeRepository.performAssessment(FormsRepository.allForms())
+                    AssessedEmployeeRepository.performAssessment(FormsRepository.getAll())
                     call.respond(
-                        AssessedEmployeeRepository.allAssessedEmployees()
+                        AssessedEmployeeRepository.getAll()
                     )
                 }
                 get("forms") {
                     call.respond(
-                        FormsRepository.allForms()
+                        FormsRepository.getAll()
                     )
                 }
             }
         }
         route("$URL_PREFIX/init") {
             post {
-                val credentials = call.receive<Credentials>()
-                if (SecretsVault.init(credentials.login, credentials.password))
+                val credentials = call.receive<UserPasswordCredential>()
+                if (SecretsVault.init(credentials)) {
+                    EmployeesRepository.init()
+                    SkillsRepository.init()
+                    // ToDo: validate forms agains loaded employees and skills to avoid "broken links"
+                    FormsRepository.init()
                     call.respond(HttpStatusCode.OK)
-                else
+                } else
                     call.respond(HttpStatusCode.MethodNotAllowed)
             }
         }

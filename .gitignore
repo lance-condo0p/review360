@@ -1,4 +1,7 @@
 /.idea/
 /.gradle/
 /build/
+
+# file storage
 /db/test.xlsx
+/db/ReviewForms.json

@@ -9,7 +9,7 @@ fun Application.configureSecurity() {
         basic("auth-basic") {
             realm = "Access to the '/' path"
             validate { credentials ->
-                if (SecretsVault.validate(credentials.name, credentials.password)) {
+                if (SecretsVault.validate(credentials)) {
                     UserIdPrincipal(credentials.name)
                 } else {
                     null

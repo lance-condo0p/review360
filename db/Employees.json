@@ -1,0 +1,14 @@
+[
+  {
+    "email": "john@mail.io",
+    "name": "John Smith"
+  },
+  {
+    "email": "mark@mail.io",
+    "name": "Mark Axe"
+  },
+  {
+    "email": "mike@gmail.com",
+    "name": "Mike Ox"
+  }
+]

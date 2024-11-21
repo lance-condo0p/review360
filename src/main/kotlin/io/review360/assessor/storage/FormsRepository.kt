@@ -1,46 +1,49 @@
 package io.review360.assessor.storage
 
-import io.ktor.http.*
-import io.review360.assessor.model.Score
-import io.review360.assessor.model.SkillCode
-
-data class Answer(
-    val code: SkillCode,
-    val description: String = code.description,
-    val points: Score = Score.None,
-)
-
-data class ReviewForm(
-    val reviewerEmail: String,
-    val employeeEmail: String,
-    val answers: Set<Answer>,
-)
-
-data class ProcessingMessage(
-    val message: String,
-)
-
-enum class SubmissionResult(
-    val statusCode: HttpStatusCode,
-    val result: ProcessingMessage,
-) {
-    OK(HttpStatusCode.Created, ProcessingMessage("Submitted successfully")),
-    InvalidEmployee(HttpStatusCode.NotAcceptable, ProcessingMessage("Employee unknown!")),
-    InvalidSkill(HttpStatusCode.NotAcceptable, ProcessingMessage("Skill unknown!")),
-    Duplicate(HttpStatusCode.Conflict, ProcessingMessage("Review Form has been submitted already!")),
-}
+import com.fasterxml.jackson.module.kotlin.readValue
+import io.ktor.util.logging.*
+import io.review360.assessor.model.ReviewForm
+import io.review360.assessor.model.SubmissionResult
+import io.review360.assessor.plugins.JsonMapper.defaultMapper
+import java.io.BufferedWriter
+import java.io.File
+import java.io.FileWriter
 
 /*
  * In-memory container for submitted review forms
  */
-object FormsRepository {
+data object FormsRepository {
     private val submittedForms = mutableListOf<ReviewForm>()
-
-    fun allForms(): List<ReviewForm> = submittedForms
+    private val LOGGER = KtorSimpleLogger("io.review360.assessor.storage.FormsRepository")
 
     private fun getDuplicates(reviewerEmail: String, employeeEmail: String) = submittedForms.find {
         it.reviewerEmail == reviewerEmail && it.employeeEmail == employeeEmail
     }
+
+    fun init() {
+        val file = File("db/ReviewForms.json")
+        if (file.exists()) {
+            val jsonString = file.readText(Charsets.UTF_8)
+            submittedForms.addAll(defaultMapper.readValue<List<ReviewForm>>(jsonString))
+            LOGGER.trace("Loading review forms...")
+            if (LOGGER.isTraceEnabled)
+                for (form in submittedForms)
+                    LOGGER.trace("- loaded: {}", form)
+        } else {
+            LOGGER.trace("Loading review forms skipped because no stored form found.")
+        }
+    }
+
+    // ToDo: implement a less greedy algorithm as now to rewrites the entire file
+    private fun saveToDB() {
+        val file = File("db/ReviewForms.json")
+        val output = BufferedWriter(FileWriter(file))
+        defaultMapper.writeValue(output, submittedForms)
+//        output.write(submittedForms.toString())
+        output.close()
+    }
+
+    fun getAll(): List<ReviewForm> = submittedForms
 
     fun submitForm(form: ReviewForm): SubmissionResult {
         if (EmployeesRepository.getEmployeeByEmail(form.employeeEmail) == null) {
@@ -54,6 +57,7 @@ object FormsRepository {
             return SubmissionResult.Duplicate
         }
         submittedForms.add(form)
+        saveToDB()
         return SubmissionResult.OK
     }
 }

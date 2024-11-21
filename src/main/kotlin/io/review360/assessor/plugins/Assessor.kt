@@ -1,7 +1,9 @@
-package io.review360.assessor.storage
+package io.review360.assessor.plugins
 
 import io.review360.assessor.model.Employee
-import io.review360.assessor.model.SkillCode
+import io.review360.assessor.model.ReviewForm
+import io.review360.assessor.model.Skill
+import io.review360.assessor.storage.EmployeesRepository
 
 data class AssessmentResult(
     val scorePerReviewer: MutableMap<String, Int>, // String = ReviewerEmail
@@ -12,16 +14,16 @@ data class AssessmentResult(
 }
 
 data class ReviewResults(
-    val skills: MutableMap<SkillCode, AssessmentResult>,
+    val skills: MutableMap<Skill, AssessmentResult>,
 )
 
 /*
  * In-memory container for processed review forms
  */
-object AssessedEmployeeRepository {
+data object AssessedEmployeeRepository {
     private val assessedEmployees = mutableMapOf<Employee, ReviewResults>()
 
-    fun allAssessedEmployees(): Map<Employee, ReviewResults> = assessedEmployees
+    fun getAll(): Map<Employee, ReviewResults> = assessedEmployees
 
     fun performAssessment(forms: List<ReviewForm>) {
         for (reviewForm in forms) {
@@ -29,11 +31,11 @@ object AssessedEmployeeRepository {
             val employee = EmployeesRepository.getEmployeeByEmail(reviewForm.employeeEmail)
             if (assessedEmployees.containsKey(employee)) {
                 reviewForm.answers.map {
-                    assessedEmployees[employee]!!.skills[it.code]!!.scorePerReviewer[reviewer]=it.points.weight
+                    assessedEmployees[employee]!!.skills[it.skill]!!.scorePerReviewer[reviewer]=it.points.weight
                 }
             } else {
                 assessedEmployees[employee!!] = ReviewResults(
-                    skills = reviewForm.answers.associate { it.code to AssessmentResult(
+                    skills = reviewForm.answers.associate { it.skill to AssessmentResult(
                         scorePerReviewer = mutableMapOf(reviewer to it.points.weight)
                     ) }.toMutableMap()
                 )

@@ -1,45 +1,45 @@
-<!DOCTYPE html >
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Review 360</title>
-    <link href="/styles/adapter.css" rel="stylesheet">
-    <script type="application/javascript" src="/js/adapter.js"></script>
-</head>
-<body>
-    <div>
+    <!DOCTYPE html >
+    <html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Review 360</title>
+        <link href="/styles/adapter.css" rel="stylesheet">
+        <script type="application/javascript" src="/js/adapter.js"></script>
+    </head>
+    <body>
         <div>
-            <h3>Hello, <span th:text="${reviewerEmail}"></span> <a href="javascript:logout()">(X)</a></h3>
-            <h4>Please answer all the questions below and click "Submit review" button.</h4>
+            <div>
+                <h3>Hello, <span th:text="${reviewerEmail}"></span> <a href="javascript:logout()">(X)</a></h3>
+                <h4>Please answer all the questions below and click "Submit review" button.</h4>
+            </div>
+            <div>
+                <form id="reviewForm">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr><th>Question</th><th>Your answer</th></tr>
+                        </thead>
+                        <tbody id="questionsTableBody">
+                            <tr>
+                                <td>
+                                    <label for="employee">Who are you going to review? Please select:</label>
+                                </td>
+                                <td>
+                                    <select id="employee" name="employeeEmail" class="minimal" required></select>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>
+                                    <input type="hidden" name="reviewerEmail" th:value="${reviewerEmail}">
+                                </td>
+                                <td>
+                                    <input type="submit" class="button" value="Submit review">
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </form>
+            </div>
         </div>
-        <div>
-            <form id="reviewForm">
-                <table class="table table-striped">
-                    <thead>
-                    <tr><th>Question</th><th>Your answer</th></tr>
-                    </thead>
-                    <tbody id="questionsTableBody">
-                        <tr>
-                            <td>
-                                <label for="employee">Who are you going to review? Please select:</label>
-                            </td>
-                            <td>
-                                <select id="employee" name="employeeEmail" class="minimal" required></select>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td>
-                                <input type="hidden" name="reviewerEmail" th:value="${reviewerEmail}">
-                            </td>
-                            <td>
-                                <input type="submit" class="button" value="Submit review">
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </form>
-        </div>
-    </div>
-</body>
-</html>
+    </body>
+    </html>

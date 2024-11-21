@@ -1,15 +1,16 @@
 package io.review360.assessor.plugins
 
+import io.review360.assessor.model.Employee
 import io.review360.assessor.storage.ReviewResults
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.File
 
-fun createExcel(assessedEmployees: Map<String, ReviewResults>) {
+fun createExcel(assessedEmployees: Map<Employee, ReviewResults>) {
     val workbook = XSSFWorkbook()
     for(employee in assessedEmployees) {
-        val workSheet = workbook.createSheet(employee.key)
+        val workSheet = workbook.createSheet("${employee.key.name} (${employee.key.email})")
 
         val cellStyle = workbook.createCellStyle()
         cellStyle.fillForegroundColor = IndexedColors.GREY_25_PERCENT.getIndex()
@@ -51,7 +52,7 @@ fun createExcel(assessedEmployees: Map<String, ReviewResults>) {
 //    workbook.close()
 
     try {
-        val file = File("build/test.xlsx")
+        val file = File("db/test.xlsx")
         val stream = file.outputStream()
         workbook.write(stream)
         workbook.close()

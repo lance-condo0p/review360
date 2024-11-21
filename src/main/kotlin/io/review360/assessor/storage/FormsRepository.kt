@@ -25,7 +25,9 @@ enum class SubmissionResult(
     val result: ProcessingMessage,
 ) {
     OK(HttpStatusCode.Created, ProcessingMessage("Submitted successfully")),
-    Duplicate(HttpStatusCode.Conflict, ProcessingMessage("Review Form has been submitted already!"))
+    InvalidEmployee(HttpStatusCode.NotAcceptable, ProcessingMessage("Employee unknown!")),
+    InvalidSkill(HttpStatusCode.NotAcceptable, ProcessingMessage("Skill unknown!")),
+    Duplicate(HttpStatusCode.Conflict, ProcessingMessage("Review Form has been submitted already!")),
 }
 
 /*
@@ -41,6 +43,13 @@ object FormsRepository {
     }
 
     fun submitForm(form: ReviewForm): SubmissionResult {
+        if (EmployeesRepository.getEmployeeByEmail(form.employeeEmail) == null) {
+            return SubmissionResult.InvalidEmployee
+        }
+        // ToDo: check skills agains dictionary
+//        if (form.answers.forEach { it.code instanceOf SkillCode } ) {
+//            return SubmissionResult.InvalidSkill
+//        }
         if (getDuplicates(form.reviewerEmail, form.employeeEmail) != null) {
             return SubmissionResult.Duplicate
         }

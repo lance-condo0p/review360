@@ -2,6 +2,7 @@ package io.review360.assessor.plugins
 
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -21,25 +22,14 @@ fun Application.configureRouting() {
                 val form = call.receive<ReviewForm>()
                 when (FormsRepository.submitForm(form)) {
                     SubmissionResult.OK -> call.respond(SubmissionResult.OK.statusCode, SubmissionResult.OK.result)
+                    SubmissionResult.InvalidEmployee -> call.respond(SubmissionResult.InvalidEmployee.statusCode, SubmissionResult.InvalidEmployee.result)
+                    SubmissionResult.InvalidSkill -> call.respond(SubmissionResult.InvalidSkill.statusCode, SubmissionResult.InvalidSkill.result)
                     SubmissionResult.Duplicate -> call.respond(SubmissionResult.Duplicate.statusCode, SubmissionResult.Duplicate.result)
                 }
             }
             get("employees") {
                 call.respond(
-                    listOf(
-                        Employee(
-                            email = "ivan@mail.ru",
-                            name = "John Smith",
-                        ),
-                        Employee(
-                            email = "mark@mail.ru",
-                            name = "Mark Axe",
-                        ),
-                        Employee(
-                            email = "fedor@ya.ru",
-                            name = "Mike Ox",
-                        ),
-                    )
+                    EmployeesRepository.allEmployees()
                 )
             }
             get("questions") {
@@ -64,22 +54,24 @@ fun Application.configureRouting() {
                 call.respond(marks)
             }
         }
-        route("$URL_PREFIX/admin") {
-            post("report/download") {
-                AssessedEmployeeRepository.performAssessment(FormsRepository.allForms())
-                createExcel(AssessedEmployeeRepository.allAssessedEmployees())
-                call.respond(HttpStatusCode.OK)
-            }
-            get("report") {
-                AssessedEmployeeRepository.performAssessment(FormsRepository.allForms())
-                call.respond(
-                    AssessedEmployeeRepository.allAssessedEmployees()
-                )
-            }
-            get("forms") {
-                call.respond(
-                    FormsRepository.allForms()
-                )
+        authenticate("auth-basic") {
+            route("$URL_PREFIX/admin") {
+                post("report/download") {
+                    AssessedEmployeeRepository.performAssessment(FormsRepository.allForms())
+                    createExcel(AssessedEmployeeRepository.allAssessedEmployees())
+                    call.respond(HttpStatusCode.OK)
+                }
+                get("report") {
+                    AssessedEmployeeRepository.performAssessment(FormsRepository.allForms())
+                    call.respond(
+                        AssessedEmployeeRepository.allAssessedEmployees()
+                    )
+                }
+                get("forms") {
+                    call.respond(
+                        FormsRepository.allForms()
+                    )
+                }
             }
         }
     }

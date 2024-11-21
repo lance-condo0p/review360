@@ -4,9 +4,9 @@ enum class Score(
     val description: String,
     val weight: Int,
 ) {
-    Nope("I don't know", 0),
-    Low("Absolutely disagree", 1),
-    Medium("Probably yes", 2),
-    High("Absolutely agree", 3),
-    Highest("More than agree", 4),
+    None("0 - I don't know", 0),
+    Low("1 - Absolutely disagree", 1),
+    Medium("2 - Probably yes", 2),
+    High("3 - Absolutely agree", 3),
+    Highest("4 - More than agree", 4),
 }

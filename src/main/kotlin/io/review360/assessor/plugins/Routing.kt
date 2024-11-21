@@ -8,16 +8,19 @@ import io.ktor.server.routing.*
 import io.review360.assessor.model.*
 
 import io.review360.assessor.model.SkillCode
+import io.review360.assessor.storage.Answer
+import io.review360.assessor.storage.FormsRepository
+import io.review360.assessor.storage.ReviewForm
+import io.review360.assessor.storage.SubmissionResult
 
 fun Application.configureRouting() {
     routing {
         route("/api/v1/forms") {
             post {
                 val form = call.receive<ReviewForm>()
-                if (FormsRepository.submitForm(form)) {
-                    call.respond(HttpStatusCode.Created)
-                } else {
-                    call.respond(HttpStatusCode.BadRequest)
+                when (FormsRepository.submitForm(form)) {
+                    SubmissionResult.OK -> call.respond(SubmissionResult.OK.statusCode, SubmissionResult.OK.result)
+                    SubmissionResult.Duplicate -> call.respond(SubmissionResult.Duplicate.statusCode, SubmissionResult.Duplicate.result)
                 }
             }
             get {

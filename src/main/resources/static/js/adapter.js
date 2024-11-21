@@ -114,7 +114,7 @@ async function loadEmployees() {
         const opt = document.createElement("option");
         const att = document.createAttribute("value");
 
-        const textAttr = document.createTextNode(employee.name);
+        const textAttr = document.createTextNode(employee.name + ' (' + employee.email + ')');
         att.value = employee.email;
         opt.setAttributeNode(att);
 
@@ -193,19 +193,21 @@ window.onload = function() {
 
         const jsonFormData = buildJsonFormData(e.target);
 
-        fetch("/api/v1/forms", {
-          method: "POST",
-          body: JSON.stringify(jsonFormData),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8"
-          }
-        }).then(response => {
+        (async() => {
+            const response = await fetch("/api/v1/forms", {
+              method: "POST",
+              body: JSON.stringify(jsonFormData),
+              headers: {
+                "Content-type": "application/json; charset=UTF-8"
+              }
+            });
+            const rspMessage = await response.json();
             if(response.status == 201) {
-                alert("All good");
+                alert(rspMessage.message);
                 resetForm();
             } else {
-                alert("Error!");
+                alert(rspMessage.message);
             }
-        });
+        })();
      });
 };

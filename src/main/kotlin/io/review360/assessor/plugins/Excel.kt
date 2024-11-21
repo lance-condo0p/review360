@@ -1,8 +1,8 @@
 package io.review360.assessor.plugins
 
-import io.review360.assessor.model.AssessedEmployeeRepository
-import io.review360.assessor.model.FormsRepository
-import io.review360.assessor.model.ReviewForm
+import io.review360.assessor.storage.AssessedEmployeeRepository
+import io.review360.assessor.storage.FormsRepository
+import io.review360.assessor.storage.ReviewForm
 import org.apache.poi.ss.usermodel.FillPatternType
 import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.xssf.usermodel.XSSFWorkbook

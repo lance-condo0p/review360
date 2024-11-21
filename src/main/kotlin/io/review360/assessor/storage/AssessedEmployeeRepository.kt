@@ -1,4 +1,6 @@
-package io.review360.assessor.model
+package io.review360.assessor.storage
+
+import io.review360.assessor.model.SkillCode
 
 data class AssessmentResult(
     val scorePerReviewer: MutableMap<String, Int>, // String = Reviewer
@@ -12,6 +14,9 @@ data class ReviewResults(
     val skills: MutableMap<SkillCode, AssessmentResult>,
 )
 
+/*
+ * In-memory container for processed review forms
+ */
 object AssessedEmployeeRepository {
     private val assessedEmployees = mutableMapOf<String, ReviewResults>() // String = Employee
 

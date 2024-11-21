@@ -4,10 +4,11 @@ enum class SkillCode(
     val description: String,
     val type: SkillType,
 ) {
-    SoftType1("The ability to talk", SkillType.SoftSkill),
-    SoftType2("The ability to walk", SkillType.SoftSkill),
-    SoftType3("The ability to get", SkillType.SoftSkill),
-    HardType1("Java programming", SkillType.HardSkill),
-    HardType2("Ansible knowledge", SkillType.HardSkill),
-    HardType3("SQL knowledge", SkillType.HardSkill),
+    SoftType1("Employee has the ability to talk", SkillType.GeneralSoft),
+    SoftType2("Employee has the ability to walk", SkillType.GeneralSoft),
+    SoftType3("Employee has the ability to get", SkillType.GeneralSoft),
+    HardType1("Employee knows Java programming", SkillType.ProgrammingHard),
+    HardType2("Employee knows Git", SkillType.ProgrammingHard),
+    HardType3("Employee has Ansible knowledge", SkillType.ProgrammingHard),
+    HardType5("Employee has SQL knowledge", SkillType.ProgrammingHard),
 }

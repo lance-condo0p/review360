@@ -2,36 +2,36 @@
   {
     "code": "SoftType1",
     "description": "Employee has the ability to talk",
-    "type": "GeneralSoft"
+    "type": "SoftGeneral"
   },
   {
     "code": "SoftType2",
     "description": "Employee has the ability to walk",
-    "type": "GeneralSoft"
+    "type": "SoftGeneral"
   },
   {
     "code": "SoftType3",
     "description": "Employee has the ability to get",
-    "type": "GeneralSoft"
+    "type": "SoftGeneral"
   },
   {
     "code": "HardType1",
     "description": "Employee knows Java programming",
-    "type": "ProgrammingHard"
+    "type": "HardProgramming"
   },
   {
     "code": "HardType2",
     "description": "Employee knows Git",
-    "type": "ProgrammingHard"
+    "type": "HardProgramming"
   },
   {
     "code": "HardType3",
     "description": "Employee has Ansible knowledge",
-    "type": "ProgrammingHard"
+    "type": "HardProgramming"
   },
   {
     "code": "HardType4",
     "description": "Employee has SQL knowledge",
-    "type": "ProgrammingHard"
+    "type": "HardProgramming"
   }
 ]

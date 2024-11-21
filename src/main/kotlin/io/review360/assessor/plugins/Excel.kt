@@ -20,14 +20,17 @@ fun createExcel(assessedEmployees: Map<Employee, ReviewResults>) {
 
         val headRow = workSheet.createRow(rowPointer++)
         val cell = headRow.createCell(columnPointer++)
-        cell.setCellValue("Code")
+        cell.setCellValue("Skill Code")
         cell.cellStyle = cellStyle
         val cell2 = headRow.createCell(columnPointer++)
-        cell2.setCellValue("Skill")
+        cell2.setCellValue("Description")
         cell2.cellStyle = cellStyle
-        val cell3 = headRow.createCell(columnPointer)
-        cell3.setCellValue("Score (average)")
+        val cell3 = headRow.createCell(columnPointer++)
+        cell3.setCellValue("Type")
         cell3.cellStyle = cellStyle
+        val cell4 = headRow.createCell(columnPointer)
+        cell4.setCellValue("Score (average)")
+        cell4.cellStyle = cellStyle
 
         for (skill in employee.value.skills) {
             columnPointer = 0
@@ -36,6 +39,7 @@ fun createExcel(assessedEmployees: Map<Employee, ReviewResults>) {
 
             row.createCell(columnPointer++).setCellValue(skill.key.code)
             row.createCell(columnPointer++).setCellValue(skill.key.description)
+            row.createCell(columnPointer++).setCellValue(skill.key.type.name)
             row.createCell(columnPointer++).setCellValue(skill.value.getAverage())
 
             for (reviewer in skill.value.scorePerReviewer) {

@@ -25,7 +25,7 @@ data object AssessedEmployeeRepository {
 
     fun getAll(): Map<Employee, ReviewResults> = assessedEmployees
 
-    fun performAssessment(forms: List<ReviewForm>) {
+    fun performAssessment(forms: Set<ReviewForm>) {
         for (reviewForm in forms) {
             val reviewer = reviewForm.reviewerEmail
             val employee = EmployeesRepository.getEmployeeByEmail(reviewForm.employeeEmail)

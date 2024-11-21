@@ -9,11 +9,11 @@ import java.io.File
 /*
  * In-memory container for skills list
  */
-data object SkillsRepository {
+data object SkillsRepository: FileRepository<Skill> {
     private val skills = mutableSetOf<Skill>()
     private val LOGGER = KtorSimpleLogger("io.review360.assessor.storage.SkillsRepository")
 
-    fun init() {
+    override fun init() {
         val jsonString = File("db/Skills.json").readText(Charsets.UTF_8)
         val skillsFromFile = defaultMapper.readValue<Set<Skill>>(jsonString)
         LOGGER.trace("Loading skills...")
@@ -30,5 +30,5 @@ data object SkillsRepository {
 
     fun getByCode(code: String): Skill? = skills.findLast { it.code == code }
 
-    fun getAll(): Set<Skill> = skills
+    override fun getAll(): Set<Skill> = skills
 }

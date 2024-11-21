@@ -9,11 +9,11 @@ import java.io.File
 /*
  * In-memory container for employees list
  */
-data object EmployeesRepository {
+data object EmployeesRepository: FileRepository<Employee> {
     private val employees = mutableSetOf<Employee>()
     private val LOGGER = KtorSimpleLogger("io.review360.assessor.storage.EmployeesRepository")
 
-    fun init() {
+    override fun init() {
         val jsonString = File("db/Employees.json").readText(Charsets.UTF_8)
         employees.addAll(defaultMapper.readValue<Set<Employee>>(jsonString))
         LOGGER.trace("Loading employees...")
@@ -26,5 +26,5 @@ data object EmployeesRepository {
         it.email == email
     }
 
-    fun getAll(): Set<Employee> = employees
+    override fun getAll(): Set<Employee> = employees
 }

@@ -12,19 +12,19 @@ import java.io.FileWriter
 /*
  * In-memory container for submitted review forms
  */
-data object FormsRepository {
-    private val submittedForms = mutableListOf<ReviewForm>()
+data object FormsRepository: FileRepository<ReviewForm> {
+    private val submittedForms = mutableSetOf<ReviewForm>()
     private val LOGGER = KtorSimpleLogger("io.review360.assessor.storage.FormsRepository")
 
     private fun getDuplicates(reviewerEmail: String, employeeEmail: String) = submittedForms.find {
         it.reviewerEmail == reviewerEmail && it.employeeEmail == employeeEmail
     }
 
-    fun init() {
+    override fun init() {
         val file = File("db/ReviewForms.json")
         if (file.exists()) {
             val jsonString = file.readText(Charsets.UTF_8)
-            submittedForms.addAll(defaultMapper.readValue<List<ReviewForm>>(jsonString))
+            submittedForms.addAll(defaultMapper.readValue<Set<ReviewForm>>(jsonString))
             LOGGER.trace("Loading review forms...")
             if (LOGGER.isTraceEnabled)
                 for (form in submittedForms)
@@ -39,17 +39,16 @@ data object FormsRepository {
         val file = File("db/ReviewForms.json")
         val output = BufferedWriter(FileWriter(file))
         defaultMapper.writeValue(output, submittedForms)
-//        output.write(submittedForms.toString())
         output.close()
     }
 
-    fun getAll(): List<ReviewForm> = submittedForms
+    override fun getAll(): Set<ReviewForm> = submittedForms
 
     fun submitForm(form: ReviewForm): SubmissionResult {
         if (EmployeesRepository.getEmployeeByEmail(form.employeeEmail) == null) {
             return SubmissionResult.InvalidEmployee
         }
-        // ToDo: check skills agains dictionary
+        // ToDo: check skills against dictionary
 //        if (form.answers.forEach { it.code instanceOf SkillCode } ) {
 //            return SubmissionResult.InvalidSkill
 //        }

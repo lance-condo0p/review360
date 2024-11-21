@@ -1,6 +1,8 @@
-package com.example.plugins
+package io.review360.assessor.plugins
 
 import io.ktor.server.application.*
+import io.ktor.server.http.content.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.thymeleaf.Thymeleaf
@@ -16,10 +18,15 @@ fun Application.configureTemplating() {
         })
     }
     routing {
-        get("/html-thymeleaf") {
-            call.respond(ThymeleafContent("index", mapOf("user" to ThymeleafUser(1, "user1"))))
+        route("/forms") {
+            post {
+                val formContent = call.receiveParameters()
+                val reviewerEmail = formContent["email"]?: ""
+                call.respond(
+                    ThymeleafContent("review360", mapOf("reviewerEmail" to reviewerEmail))
+                )
+            }
         }
+        staticResources("/", "static")
     }
 }
-
-data class ThymeleafUser(val id: Int, val name: String)

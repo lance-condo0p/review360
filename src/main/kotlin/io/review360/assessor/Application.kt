@@ -1,6 +1,6 @@
-package com.example
+package io.review360.assessor
 
-import com.example.plugins.*
+import io.review360.assessor.plugins.*
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {
@@ -13,4 +13,5 @@ fun Application.module() {
     configureTemplating()
     configureSecurity()
     configureRouting()
+    configureLogging()
 }

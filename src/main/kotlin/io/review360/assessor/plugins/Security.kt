@@ -1,4 +1,4 @@
-package com.example.plugins
+package io.review360.assessor.plugins
 
 import io.ktor.server.application.*
 import io.ktor.server.auth.*

@@ -13,25 +13,19 @@ version = "0.0.1"
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
-
-    val isDevelopment: Boolean = project.ext.has("development")
-    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+//    val isDevelopment: Boolean = project.ext.has("development")
+//    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
-repositories {    mavenCentral()
+repositories {
+    mavenCentral()
 }
-
-//pluginManagement {
-//    repositories {
-//        gradlePluginPortal()
-//        maven("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
-//    }
-//}
 
 dependencies {
     implementation("io.ktor:ktor-server-core-jvm")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
+    implementation("io.ktor:ktor-server-call-logging")
     implementation("org.jetbrains.exposed:exposed-core:0.53.0")
     implementation("org.jetbrains.exposed:exposed-jdbc:0.53.0")
     implementation("com.h2database:h2:$h2_version")
@@ -47,18 +41,18 @@ dependencies {
 }
 
 // build.gradle.kts
-ktor {
-    docker {
-        jreVersion.set(JreVersion.JRE_17)
-        localImageName.set("sample-docker-image")
-        imageTag.set("0.0.1-preview")
-
-        externalRegistry.set(
-            DockerImageRegistry.dockerHub(
-                appName = provider { "ktor-app" },
-                username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
-                password = providers.environmentVariable("DOCKER_HUB_PASSWORD")
-            )
-        )
-    }
-}
+//ktor {
+//    docker {
+//        jreVersion.set(JreVersion.JRE_17)
+//        localImageName.set("sample-docker-image")
+//        imageTag.set("0.0.1-preview")
+//
+//        externalRegistry.set(
+//            DockerImageRegistry.dockerHub(
+//                appName = provider { "ktor-app" },
+//                username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
+//                password = providers.environmentVariable("DOCKER_HUB_PASSWORD")
+//            )
+//        )
+//    }
+//}

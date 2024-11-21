@@ -13,31 +13,48 @@
     <h1>Hello,<span th:text="${reviewerEmail}"></span></h1>
     <h2>Please set points from 1 to 4 for each question:</h2>
 </div>
-<div>
-    <form action="javascript:fetchAndDisplayTasks()">
-        <input type="submit" value="Another review">
-    </form>
-    <form action="javascript:fetchAndDisplayTasks()">
-        <input type="submit" value="Exit">
-    </form>
-</div>
+<table>
+    <tbody>
+        <tr>
+            <td>
+                <form action="javascript:anotherReview()">
+                    <input type="submit" value="Another review">
+                </form>
+            </td>
+            <td>
+                <form action="javascript:exitReview()">
+                    <input type="submit" value="Exit">
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
 <div>
     <form id="reviewForm" action="">
-        <input type="submit" value="Submit review">
-        <input type="hidden" name="reviewerEmail" th:value="${reviewerEmail}">
         <table class="table table-striped">
             <thead>
             <tr><th>Question</th><th>Your answer</th></tr>
             </thead>
-            <tr>
-                <td>
-                    <label for="employee">Who are you going to review? Please select:</label>
-                </td>
-                <td>
-                    <select id="employee" name="employeeEmail"></select>
-                </td>
-            </tr>
             <tbody id="questionsTableBody">
+                <tr>
+                    <td>
+                        <label for="employee">Who are you going to review? Please select:</label>
+                    </td>
+                    <td>
+                        <select id="employee" name="employeeEmail"></select>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        <input type="submit" value="Submit review">
+                    </td>
+                    <td>
+                        <input type="hidden" name="reviewerEmail" th:value="${reviewerEmail}">
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     </form>
 </div>

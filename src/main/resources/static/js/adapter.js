@@ -153,12 +153,23 @@ function buildJsonFormData(form) {
 function isValidForm() {
     const answers = document.getElementsByTagName("select");
     for (let i = 0; i < answers.length; i++) {
-      console.log(answers[i].options[answers[i].selectedIndex].value);
+//      console.log(answers[i].options[answers[i].selectedIndex].value);
       if(answers[i].options[answers[i].selectedIndex].value == "-") {
         return false;
       };
     }
     return true;
+}
+
+function anotherReview() {
+    const optionsToReset = document.querySelectorAll("option");
+    for (let i = 0; i < optionsToReset.length; i++) {
+        optionsToReset[i].selected = optionsToReset[i].defaultSelected;
+    }
+}
+
+function exitReview() {
+    window.location.href = "/";
 }
 
 window.onload = function() {
